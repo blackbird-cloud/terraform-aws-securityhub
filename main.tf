@@ -52,11 +52,11 @@ resource "aws_securityhub_standards_control" "disabled_rules" {
 }
 
 resource "aws_securityhub_action_target" "default" {
-  depends_on = [aws_securityhub_organization_configuration.default]
-
   for_each = var.action_targets
 
   name        = each.value.name
   identifier  = each.value.identifier
   description = each.value.description
+
+  depends_on = [aws_securityhub_organization_configuration.default]
 }
