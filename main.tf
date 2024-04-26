@@ -60,3 +60,19 @@ resource "aws_securityhub_action_target" "default" {
 
   depends_on = [aws_securityhub_organization_configuration.default]
 }
+
+data "aws_organizations_organizational_unit_descendant_accounts" "accounts" {
+  for_each = var.enable_for_organizational_units
+
+  parent_id = each.value
+}
+
+resource "aws_securityhub_member" "default" {
+  for_each =  {
+    for key, account in data.aws_organizations_organizational_unit_descendant_accounts.accounts : account.id => account
+  }
+
+  account_id = each.value.id
+  email      = each.value.email
+  invite     = true
+}
