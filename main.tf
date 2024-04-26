@@ -75,4 +75,6 @@ resource "aws_securityhub_member" "default" {
   account_id = each.value.id
   email      = each.value.email
   invite     = true
+
+  depends_on = [aws_securityhub_organization_configuration.default]
 }
