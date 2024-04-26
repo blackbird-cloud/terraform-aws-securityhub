@@ -61,7 +61,7 @@ resource "aws_securityhub_action_target" "default" {
   depends_on = [aws_securityhub_organization_configuration.default]
 }
 
-data "aws_organizations_organizational_unit_descendant_accounts" "accounts" {
+data "aws_organizations_organizational_unit_descendant_accounts" "default" {
   for_each = var.enable_for_organizational_units
 
   parent_id = each.value
@@ -69,7 +69,11 @@ data "aws_organizations_organizational_unit_descendant_accounts" "accounts" {
 
 resource "aws_securityhub_member" "default" {
   for_each =  {
-    for key, account in data.aws_organizations_organizational_unit_descendant_accounts.accounts : account.id => account
+    for account in flatten([
+      for key, descendants in data.aws_organizations_organizational_unit_descendant_accounts.default : [
+        for descendant in descendants : descendant
+      ]
+    ]) account.id => account
   }
 
   account_id = each.value.id
