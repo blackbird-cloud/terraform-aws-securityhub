@@ -5,12 +5,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.47.0 |
 
 ## Modules
 
@@ -22,12 +23,14 @@ No modules.
 |------|------|
 | [aws_securityhub_action_target.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_action_target) | resource |
 | [aws_securityhub_finding_aggregator.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_finding_aggregator) | resource |
+| [aws_securityhub_member.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_member) | resource |
 | [aws_securityhub_organization_configuration.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_organization_configuration) | resource |
 | [aws_securityhub_product_subscription.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_product_subscription) | resource |
 | [aws_securityhub_standards_control.disabled_rules](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_control) | resource |
 | [aws_securityhub_standards_subscription.best_practices_aws_foundations_benchmark](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_subscription) | resource |
 | [aws_securityhub_standards_subscription.cis_1_2_aws_foundations_benchmark](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_subscription) | resource |
 | [aws_securityhub_standards_subscription.cis_1_4_aws_foundations_benchmark](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_subscription) | resource |
+| [aws_organizations_organizational_unit_descendant_accounts.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_unit_descendant_accounts) | data source |
 
 ## Inputs
 
@@ -40,6 +43,7 @@ No modules.
 | <a name="input_enable_best_practices"></a> [enable\_best\_practices](#input\_enable\_best\_practices) | Whether to enable the AWS Foundational Security Best Practices standards subscription. | `bool` | `true` | no |
 | <a name="input_enable_cis_1_2"></a> [enable\_cis\_1\_2](#input\_enable\_cis\_1\_2) | Whether to enable the CIS AWS Foundations Benchmark v1.2.0 standards subscription. If you want to disable this, on first deploy leave it enabled, then disable it. | `bool` | `true` | no |
 | <a name="input_enable_cis_1_4"></a> [enable\_cis\_1\_4](#input\_enable\_cis\_1\_4) | Whether to enable the CIS AWS Foundations Benchmark v1.4.0 standards subscription. | `bool` | `true` | no |
+| <a name="input_enable_for_organizational_units"></a> [enable\_for\_organizational\_units](#input\_enable\_for\_organizational\_units) | Map of Organizational Units to enable Security Hub for. | `map(string)` | `{}` | no |
 | <a name="input_product_arns"></a> [product\_arns](#input\_product\_arns) | (Optional) Map of production name : product arn. The ARN of the product that generates findings that you want to import into Security Hub. | `map(string)` | `{}` | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region used for picking up the ARNs for the securityhub standards subscriptions. | `string` | n/a | yes |
 
