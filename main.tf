@@ -1,6 +1,6 @@
 resource "aws_securityhub_organization_configuration" "default" {
   auto_enable           = var.auto_enable
-  auto_enable_standards = "DEFAULT"
+  auto_enable_standards = var.auto_enable_standards
 }
 
 resource "aws_securityhub_standards_subscription" "cis_1_2_aws_foundations_benchmark" {
