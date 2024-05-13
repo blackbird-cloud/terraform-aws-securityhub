@@ -67,13 +67,15 @@ data "aws_organizations_organizational_unit_descendant_accounts" "default" {
   parent_id = each.value
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_securityhub_member" "default" {
   for_each = {
     for account in flatten([
       for key, descendants in data.aws_organizations_organizational_unit_descendant_accounts.default : [
         for account in descendants.accounts : account
       ]
-    ]) : account.id => account
+    ]) : account.id => account if account.id != data.aws_caller_identity.current.account_id
   }
 
   account_id = each.value.id
