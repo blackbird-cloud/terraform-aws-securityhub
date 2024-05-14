@@ -17,6 +17,13 @@ resource "aws_securityhub_standards_subscription" "cis_1_4_aws_foundations_bench
   depends_on    = [aws_securityhub_organization_configuration.default]
 }
 
+resource "aws_securityhub_standards_subscription" "cis_3_0_aws_foundations_benchmark" {
+  count = var.enable_cis_3_0 ? 1 : 0
+
+  standards_arn = "arn:aws:securityhub:${var.region}::standards/cis-aws-foundations-benchmark/v/3.0.0"
+  depends_on    = [aws_securityhub_organization_configuration.default]
+}
+
 resource "aws_securityhub_standards_subscription" "best_practices_aws_foundations_benchmark" {
   count = var.enable_best_practices ? 1 : 0
 

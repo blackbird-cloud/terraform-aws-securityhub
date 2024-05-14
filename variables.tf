@@ -23,8 +23,14 @@ variable "enable_cis_1_2" {
 
 variable "enable_cis_1_4" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to enable the CIS AWS Foundations Benchmark v1.4.0 standards subscription."
+}
+
+variable "enable_cis_3_0" {
+  type        = bool
+  default     = false
+  description = "Whether to enable the CIS AWS Foundations Benchmark v3.0.0 standards subscription."
 }
 
 variable "enable_best_practices" {
