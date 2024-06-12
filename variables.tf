@@ -64,8 +64,15 @@ variable "action_targets" {
   description = "Map of action targets to configure, configures AWS Security Hub to send selected insights and findings to Amazon EventBridge."
 }
 
-variable "enable_for_organizational_units" {
-  type        = map(string)
-  default     = {}
-  description = "Map of Organizational Units to enable Security Hub for."
+variable "central_config" {
+  type = object({
+    enabled           = bool
+    ous               = optional(map(string))
+    disabled_controls = optional(list(string))
+    enabled_controls  = optional(list(string))
+  })
+  default = {
+    enabled = false
+  }
+  description = "Central Security Hub configuration for the organization."
 }
