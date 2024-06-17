@@ -19,6 +19,6 @@ output "aws_securityhubaws_securityhub_organization_configuration_config" {
 }
 
 output "aws_securityhub_configuration_policy" {
-  value       = aws_securityhub_configuration_policy.default[0]
+  value       = aws_securityhub_configuration_policy.default
   description = "AWS Security Hub Configuration Policy"
 }

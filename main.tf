@@ -15,18 +15,27 @@ locals {
   best_practices_arn = "arn:aws:securityhub:${var.region}::standards/aws-foundational-security-best-practices/v/1.0.0"
 
   enabled_standards_arns = concat(local.cis_1_2_arn, local.cis_1_4_arn, local.cis_3_0_arn, [local.best_practices_arn])
+
+  policy_ous = flatten([
+    for key, policy in var.central_config.policies : [
+      for k, ou in policy.ous : {
+        policy = key
+        ou     = ou
+      }
+    ]
+  ])
 }
 
 resource "aws_securityhub_configuration_policy" "default" {
-  count = var.central_config.enabled ? 1 : 0
-  name  = "securityhub-organization-configuration-policy"
+  for_each = var.central_config.enabled ? var.central_config.policies : {}
+  name     = "securityhub-organization-configuration-${each.key}"
 
   configuration_policy {
     service_enabled       = true
     enabled_standard_arns = local.enabled_standards_arns
     security_controls_configuration {
-      disabled_control_identifiers = var.central_config.disabled_controls
-      enabled_control_identifiers  = var.central_config.enabled_controls
+      disabled_control_identifiers = each.value.disabled_controls
+      enabled_control_identifiers  = each.value.enabled_controls
     }
   }
 
@@ -34,9 +43,14 @@ resource "aws_securityhub_configuration_policy" "default" {
 }
 
 resource "aws_securityhub_configuration_policy_association" "default" {
-  for_each  = var.central_config.enabled ? var.central_config.ous : {}
-  target_id = each.value
-  policy_id = aws_securityhub_configuration_policy.default[0].id
+  for_each = var.central_config.enabled ? {
+    for each in local.policy_ous : "${each.policy}-${each.ou}" => {
+      policy = each.policy
+      ou     = each.ou
+    }
+  } : {}
+  target_id = each.value.ou
+  policy_id = aws_securityhub_configuration_policy.default[each.value.policy].id
 
   depends_on = [aws_securityhub_configuration_policy.default]
 }

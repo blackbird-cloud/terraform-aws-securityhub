@@ -66,13 +66,16 @@ variable "action_targets" {
 
 variable "central_config" {
   type = object({
-    enabled           = bool
-    ous               = optional(map(string))
-    disabled_controls = optional(list(string))
-    enabled_controls  = optional(list(string))
+    enabled = bool
+    policies = map(object({
+      ous               = optional(map(string))
+      disabled_controls = optional(list(string))
+      enabled_controls  = optional(list(string))
+    }))
   })
   default = {
-    enabled = false
+    enabled  = false
+    policies = {}
   }
   description = "Central Security Hub configuration for the organization."
 }
