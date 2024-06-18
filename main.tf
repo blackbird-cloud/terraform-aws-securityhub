@@ -6,6 +6,8 @@ resource "aws_securityhub_organization_configuration" "default" {
   organization_configuration {
     configuration_type = var.central_config.enabled ? "CENTRAL" : "LOCAL"
   }
+
+  depends_on = [ aws_securityhub_finding_aggregator.default ]
 }
 
 locals {
@@ -85,9 +87,11 @@ resource "aws_securityhub_standards_subscription" "best_practices_aws_foundation
 }
 
 resource "aws_securityhub_finding_aggregator" "default" {
-  linking_mode = "ALL_REGIONS"
+  count = var.linked_regions.type != "NONE" ? 1 : 0
 
-  depends_on = [aws_securityhub_organization_configuration.default]
+  linking_mode = var.linked_regions.type
+
+  specified_regions = var.linked_regions.type != "ALL_REGIONS" || var.linked_regions.type != "NONE" ? var.linked_regions.regions : null
 }
 
 resource "aws_securityhub_product_subscription" "default" {

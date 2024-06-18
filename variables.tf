@@ -79,3 +79,15 @@ variable "central_config" {
   }
   description = "Central Security Hub configuration for the organization."
 }
+
+variable "linked_regions" {
+  type = object({
+    type    = string
+    regions = optional(list(string))
+  })
+  default = {
+    type    = "ALL_REGIONS"
+    regions = []
+  }
+  description = "List of regions to enable Security Hub in."
+}
