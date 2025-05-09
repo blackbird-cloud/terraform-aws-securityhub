@@ -36,8 +36,72 @@ resource "aws_securityhub_configuration_policy" "default" {
     service_enabled       = true
     enabled_standard_arns = local.enabled_standards_arns
     security_controls_configuration {
-      disabled_control_identifiers = each.value.disabled_controls
-      enabled_control_identifiers  = each.value.enabled_controls
+      disabled_control_identifiers      = each.value.disabled_controls
+      enabled_control_identifiers       = each.value.enabled_controls
+      dynamic "security_control_custom_parameter" {
+        for_each = try(each.value.security_control_custom_parameters, {})
+        content {
+          security_control_id = security_control_custom_parameter.value.security_control_id
+          dynamic "parameter" {
+            for_each = try(security_control_custom_parameter.value.parameters, {})
+            content {
+              name       = parameter.value.name
+              value_type = parameter.value.value_type
+
+              dynamic "bool" {
+                for_each = can(parameter.value.bool) ? [parameter.value.bool] : []
+                content {
+                  value = bool.value
+                }
+              }
+              dynamic "double" {
+                for_each = try(parameter.value.double, [])
+                content {
+                  value = double.value
+                }
+              }
+
+              dynamic "enum" {
+                for_each = try(parameter.value.enum, [])
+                content {
+                  value = enum.value
+                }
+              }
+              
+              dynamic "enum_list" {
+                for_each = length(try(parameter.value.enum_list, [])) > 1 ? [parameter.value.enum_list] : []
+                content {
+                  value = enum_list.value
+                }
+              }
+              dynamic "int_list" {
+                for_each = length(try(parameter.value.int_list, [])) > 1 ? [parameter.value.int_list] : []
+                content {
+                  value = int_list.value
+                }
+              }
+              dynamic "string_list" {
+                for_each = length(try(parameter.value.string_list, [])) > 1 ? [parameter.value.string_list] : []
+                content {
+                  value = string_list.value
+                }
+              }
+              dynamic "string" {
+                for_each = try(parameter.value.string, [])
+                content {
+                  value = string.value
+                }
+              }
+              dynamic "int" {
+                for_each = try(parameter.value.int, [])
+                content {
+                  value = int.value
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 

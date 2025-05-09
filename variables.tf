@@ -71,6 +71,20 @@ variable "central_config" {
       ous               = optional(map(string))
       disabled_controls = optional(list(string))
       enabled_controls  = optional(list(string))
+      security_control_custom_parameters = optional(list(object({
+        security_control_id = string
+        parameters          = optional(list(object({
+          name        = string
+          value_type  = string
+          bool        = optional(bool)
+          int         = optional(number)
+          double      = optional(string)
+          enum        = optional(string)
+          enum_list   = optional(list(string))
+          int_list    = optional(list(string))
+          string_list = optional(list(string))
+        })))
+      })))
     }))
   })
   default = {
