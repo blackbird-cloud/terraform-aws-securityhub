@@ -91,7 +91,7 @@ resource "aws_securityhub_finding_aggregator" "default" {
 
   linking_mode = var.linked_regions.type
 
-  specified_regions = var.linked_regions.type != "ALL_REGIONS" || var.linked_regions.type != "NONE" ? var.linked_regions.regions : null
+  specified_regions = var.linked_regions.type != "ALL_REGIONS" && var.linked_regions.type != "NONE" ? var.linked_regions.regions : null
 }
 
 resource "aws_securityhub_product_subscription" "default" {
