@@ -7,7 +7,7 @@ resource "aws_securityhub_organization_configuration" "default" {
     configuration_type = var.central_config.enabled ? "CENTRAL" : "LOCAL"
   }
 
-  depends_on = [ aws_securityhub_finding_aggregator.default ]
+  depends_on = [aws_securityhub_finding_aggregator.default]
 }
 
 locals {
